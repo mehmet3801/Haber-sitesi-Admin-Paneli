@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<h2>Yönetim Paneli</h2>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <div class="card text-center shadow">
+            <div class="card-body">
+                <a href="@Url.Action("KategoriEkle", "Haber")" class="btn btn-primary w-100">Kategori Ekle</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card text-center shadow">
+            <div class="card-body">
+                <a href="@Url.Action("Ekle", "Haber")" class="btn btn-success w-100">Haber Ekle</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card text-center shadow">
+            <div class="card-body">
+                <a href="@Url.Action("Index", "Haber")" class="btn btn-warning w-100">Haber Listesi</a>
+            </div>
+        </div>
+    </div>
+</div>

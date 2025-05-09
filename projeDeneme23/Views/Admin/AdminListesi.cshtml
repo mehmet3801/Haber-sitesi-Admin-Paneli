@@ -1,0 +1,32 @@
+﻿@model IEnumerable<projeDeneme23.Models.UygulamaKullanici>
+
+@{
+    ViewBag.Title = "Admin Kullanıcı Listesi";
+}
+
+<h2>Admin Kullanıcıları</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Kullanıcı Adı</th>
+            <th>E-Posta</th>
+            <th>İşlem</th> <!-- Yeni Sütun -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    <form method="post" action="@Url.Action("ResetPassword", "Admin")">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit" class="btn btn-warning">Şifre Sıfırla</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

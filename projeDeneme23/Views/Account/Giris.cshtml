@@ -1,0 +1,201 @@
+﻿@{
+    ViewBag.Title = "Giriş / Kayıt";
+    ViewBag.BodyClass = "auth-page";
+}
+
+<style>
+    body {
+        background-color: rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        margin-top: 5%;
+    }
+
+    .card {
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        margin-bottom: 10px;
+    }
+
+    .nav-tabs {
+        border-bottom: none;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .nav-item {
+        flex: 1; /* Sekmeler eşit genişlikte olacak */
+        margin: 0; /* Sekmeler arasında boşluk olmayacak */
+    }
+
+    .nav-link {
+        width: 100%; /* Sekme genişliği tüm kapsayıcıyı kaplayacak */
+        text-align: center;
+        background-color: #e9ecef;
+        border: 1px solid #dee2e6;
+        border-bottom: none; /* Alt kenarlık kaldırıldı */
+        border-radius: 5px 5px 0 0; /* Üst köşeler yuvarlatılmış */
+        padding: 10px;
+        color: #000;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .nav-link.active {
+            background-color: #fff;
+            border-bottom: 1px solid #fff; /* Aktif sekmede alt kenarlık beyaz */
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            background-color: #dee2e6;
+        }
+
+    h2 {
+        margin-bottom: 20px;
+        font-weight: bold;
+        text-align: center;
+        display: none; /* Görselde başlık yok */
+    }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        width: 100%;
+        margin-bottom: 15px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        padding: 8px;
+    }
+
+    .btn {
+        width: 100%;
+        font-size: 18px;
+        background-color: #dc3545; /* Kırmızı buton */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        padding: 10px;
+    }
+
+        .btn:hover {
+            background-color: #c82333; /* Koyu kırmızı hover efekti */
+        }
+
+    .tab-content {
+        display: none;
+    }
+
+        .tab-content.active {
+            display: block;
+        }
+
+    .form-check {
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <!-- Sekmeler -->
+                <ul class="nav nav-tabs" id="auth-tabs">
+                    <li class="nav-item">
+                        <span class="nav-link active" data-tab="login-tab">Giriş Yap</span>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link" data-tab="register-tab">Kayıt Ol</span>
+                    </li>
+                </ul>
+
+                @if (ViewBag.Hata != null)
+                {
+                    <div class="alert alert-danger text-center">@ViewBag.Hata</div>
+                }
+
+                <!-- Giriş Formu -->
+                <div id="login-tab" class="tab-content active">
+                    @using (Html.BeginForm("Giris", "Account", FormMethod.Post, new { id = "login-form" }))
+                    {
+                        <div class="mb-3">
+                            <label class="form-label">Email Adresiniz:</label>
+                            <input type="email" name="email" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Şifreniz:</label>
+                            <input type="password" name="parola" class="form-control" required />
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn">Giriş Yap</button>
+                        </div>
+                    }
+                </div>
+
+                <!-- Kayıt Formu -->
+                <div id="register-tab" class="tab-content">
+                    @using (Html.BeginForm("Kayit", "Account", FormMethod.Post, new { id = "register-form" }))
+                    {
+                        <div class="mb-3">
+                            <label class="form-label">Ad Soyad:</label>
+                            <input type="text" name="adSoyad" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email Adresiniz:</label>
+                            <input type="email" name="email" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Şifreniz:</label>
+                            <input type="password" name="parola" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Şifre (Tekrar):</label>
+                            <input type="password" name="parolaOnay" class="form-control" required />
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn">Kayıt Ol</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tabs = document.querySelectorAll(".nav-link");
+        const tabContents = document.querySelectorAll(".tab-content");
+
+        tabs.forEach(tab => {
+            tab.addEventListener("click", function () {
+                // Aktif sekmeyi güncelle
+                tabs.forEach(t => t.classList.remove("active"));
+                this.classList.add("active");
+
+                // İlgili içeriği göster
+                const tabId = this.getAttribute("data-tab");
+                tabContents.forEach(content => {
+                    content.classList.remove("active");
+                    if (content.id === tabId) {
+                        content.classList.add("active");
+                    }
+                });
+            });
+        });
+    });
+</script>

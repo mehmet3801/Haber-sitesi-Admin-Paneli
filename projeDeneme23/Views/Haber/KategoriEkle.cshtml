@@ -1,0 +1,145 @@
+﻿@model List<projeDeneme23.Models.Kategori>
+@{
+    ViewBag.Title = "Kategori Yönetimi";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4><i class="fas fa-tags"></i> Kategori Yönetimi</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Kategori Ekleme Formu -->
+                        <div class="col-md-5">
+                            <div class="card mb-4">
+                                <div class="card-header bg-success text-white">
+                                    <h5><i class="fas fa-plus-circle"></i> Yeni Kategori Ekle</h5>
+                                </div>
+                                <div class="card-body">
+                                    @if (TempData["SuccessMessage"] != null)
+                                    {
+                                        <div class="alert alert-success alert-dismissible fade show">
+                                            @TempData["SuccessMessage"]
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    }
+                                    @if (TempData["ErrorMessage"] != null)
+                                    {
+                                        <div class="alert alert-danger alert-dismissible fade show">
+                                            @TempData["ErrorMessage"]
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    }
+
+                                    @using (Html.BeginForm("KategoriEkle", "Haber", FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        <div class="form-group">
+                                            <label for="Ad" class="font-weight-bold">Kategori Adı</label>
+                                            <input type="text" class="form-control" id="Ad" name="Ad" placeholder="Kategori adı giriniz" required />
+                                            <div class="invalid-feedback">Lütfen bir kategori adı giriniz.</div>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary btn-block">
+                                            <i class="fas fa-save"></i> Kategori Ekle
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Kategori Listesi -->
+                        <div class="col-md-7">
+                            <div class="card">
+                                <div class="card-header bg-info text-white">
+                                    <h5><i class="fas fa-list"></i> Mevcut Kategoriler</h5>
+                                </div>
+                                <div class="card-body">
+                                    @if (Model.Count == 0)
+                                    {
+                                        <div class="alert alert-warning">Henüz kategori eklenmemiş.</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover table-bordered">
+                                                <thead class="thead-dark">
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Kategori Adı</th>
+                                                        <th>İşlemler</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var kategori in Model)
+                                                    {
+                                                        <tr>
+                                                            <td>@kategori.Id</td>
+                                                            <td>@kategori.Ad</td>
+                                                            <td>
+                                                                <a href="@Url.Action("KategoriDuzenle", "Haber", new { id = kategori.Id })"
+                                                                   class="btn btn-sm btn-warning" title="Düzenle">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </a>
+                                                                <a href="@Url.Action("KategoriSil", "Haber", new { id = kategori.Id })"
+                                                                   class="btn btn-sm btn-danger"
+                                                                   title="Sil"
+                                                                   onclick="return confirm('Bu kategoriyi silmek istediğinize emin misiniz?\n\nBu kategoriye ait haberler de silinebilir!');">
+                                                                    <i class="fas fa-trash-alt"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Client-side validation
+        (function () {
+            'use strict';
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation');
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+        })();
+
+        // Silme işlemi onayı için ek kontrol
+        $('.btn-danger').click(function (e) {
+            if (!confirm('Bu kategoriyi silmek istediğinizden emin misiniz?\n\nBu işlem geri alınamaz!')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+}

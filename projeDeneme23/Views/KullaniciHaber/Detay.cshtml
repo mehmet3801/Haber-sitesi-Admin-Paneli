@@ -1,0 +1,26 @@
+﻿@model projeDeneme23.Models.Haber
+@{
+    ViewBag.Title = Model.Baslik;
+}
+
+<h2>@Model.Baslik</h2>
+
+@if (!string.IsNullOrEmpty(Model.AnaResimYolu))
+{
+    <img src="@Model.AnaResimYolu" alt="Haber Resmi" style="max-width: 100%; height: auto;" />
+}
+
+<p><strong>Kategori:</strong> @Model.Kategori</p>
+<p><strong>Yayın Tarihi:</strong> @Model.YayınTarihi.ToShortDateString()</p>
+<p>@Model.Icerik</p>
+
+<a href="@Url.Action("Index", "KullaniciHaber")" class="btn btn-secondary">Geri Dön</a>
+<form action="@Url.Action("Begen", "KullaniciHaber")" method="post">
+    <input type="hidden" name="haberId" value="@Model.Id" />
+    <button type="submit" class="btn btn-primary">Beğen</button>
+</form>
+<form action="@Url.Action("YorumEkle", "KullaniciHaber")" method="post">
+    <input type="hidden" name="haberId" value="@Model.Id" />
+    <textarea name="yorumIcerik" class="form-control" placeholder="Yorumunuzu yazın"></textarea>
+    <button type="submit" class="btn btn-success mt-2">Gönder</button>
+</form>

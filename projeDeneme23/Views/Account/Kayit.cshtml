@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "Kayıt Ol";
+    ViewBag.BodyClass = "auth-page";
+}
+
+<style>
+    body {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .mb3 {
+        margin-top: 5%;
+    }
+
+    .card {
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        margin-bottom:10px;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        width: 100%;
+    }
+
+    .btn {
+        width: 100%;
+        font-size: 18px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        padding: 10px;
+    }
+
+        .btn:hover {
+            background-color: red;
+            transform: scale(1.05);
+        }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <h2 class="text-center text-primary">Yeni Kullanıcı Kaydı</h2>
+
+                @if (ViewBag.Hata != null)
+                {
+                    <div class="alert alert-danger text-center">@ViewBag.Hata</div>
+                }
+
+                @using (Html.BeginForm("Kayit", "Account", FormMethod.Post))
+                {
+                    <div class="mb-3">
+                        <label class="form-label">Email:</label>
+                        <input type="email" name="email" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Parola:</label>
+                        <input type="password" name="parola" class="form-control" required />
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn">Kayıt Ol</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

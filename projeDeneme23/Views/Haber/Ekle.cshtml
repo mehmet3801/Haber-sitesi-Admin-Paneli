@@ -1,0 +1,270 @@
+﻿@model projeDeneme23.Models.Haber
+@{
+    ViewBag.Title = "Yeni Haber Ekle";
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Haber Yönetim Paneli</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --success-color: #2ecc71;
+            --dark-color: #34495e;
+            --light-color: #ecf0f1;
+            --danger-color: #e74c3c;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--dark-color);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .form-header:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            transition: all 0.3s;
+            box-shadow: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn-submit {
+            background: var(--success-color);
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-submit:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .validation-error {
+            color: var(--danger-color);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-upload-input {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            filter: alpha(opacity=0);
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 12px 15px;
+            background: var(--light-color);
+            border: 1px dashed #bdc3c7;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload-label:hover {
+            background: #dfe6e9;
+            border-color: var(--primary-color);
+        }
+
+        .file-upload-icon {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+
+        .character-count {
+            font-size: 12px;
+            color: #7f8c8d;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+        }
+
+        .select2-container--default .select2-selection--single {
+            height: 46px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 44px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 44px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="form-container">
+                    <h2 class="form-header"><i class="fas fa-plus-circle me-2"></i>Yeni Haber Ekle</h2>
+                    
+                    @using (Html.BeginForm("Ekle", "Haber", FormMethod.Post, new { enctype = "multipart/form-data", @class = "needs-validation", novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "validation-error" })
+
+                        <div class="form-section">
+                            <label class="form-label" for="Baslik"><i class="fas fa-heading me-2"></i>Başlık</label>
+                            @Html.TextBoxFor(m => m.Baslik, new { @class = "form-control", required = "required", placeholder = "Haber başlığını giriniz" })
+                            @Html.ValidationMessageFor(m => m.Baslik, "", new { @class = "validation-error" })
+                            <div class="character-count"><span id="title-count">0</span>/120 karakter</div>
+                        </div>
+
+                        <div class="form-section">
+                            <label class="form-label" for="Kategori"><i class="fas fa-tag me-2"></i>Kategori</label>
+                            @Html.DropDownListFor(m => m.Kategori, ViewBag.Kategoriler as SelectList, "Kategori Seçiniz", new { @class = "form-control select2", required = "required" })
+                            @Html.ValidationMessageFor(m => m.Kategori, "", new { @class = "validation-error" })
+                        </div>
+
+                        <div class="form-section">
+                            <label class="form-label" for="Icerik"><i class="fas fa-align-left me-2"></i>İçerik</label>
+                            @Html.TextAreaFor(m => m.Icerik, new { @class = "form-control", rows = 8, required = "required", placeholder = "Haber içeriğini giriniz" })
+                            @Html.ValidationMessageFor(m => m.Icerik, "", new { @class = "validation-error" })
+                            <div class="character-count"><span id="content-count">0</span>/5000 karakter</div>
+                        </div>
+
+                        <div class="form-section">
+                            <label class="form-label" for="Yazar"><i class="fas fa-user-edit me-2"></i>Yazar</label>
+                            @Html.TextBoxFor(m => m.Yazar, new { @class = "form-control", required = "required", placeholder = "Yazar adı giriniz" })
+                            @Html.ValidationMessageFor(m => m.Yazar, "", new { @class = "validation-error" })
+                        </div>
+
+                        <div class="form-section">
+                            <label class="form-label"><i class="fas fa-image me-2"></i>Haber Fotoğrafı</label>
+                            <div class="file-upload">
+                                <label class="file-upload-label" for="Resim">
+                                    <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                                    <span id="file-name">Dosya seçin veya sürükleyip bırakın</span>
+                                </label>
+                                <input type="file" name="Resim" id="Resim" class="file-upload-input" required accept="image/*" />
+                            </div>
+                            <small class="text-muted">Maksimum 5MB, JPG/PNG formatında olmalıdır.</small>
+                            @Html.ValidationMessage("Resim", "", new { @class = "validation-error" })
+                        </div>
+
+                        <button type="submit" class="btn btn-submit">
+                            <i class="fas fa-save me-2"></i>Haberi Kaydet
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/tr.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Select2 initialization
+            $('.select2').select2({
+                language: "tr",
+                placeholder: "Kategori Seçiniz",
+                allowClear: true
+            });
+
+            // Character counters
+            $('#Baslik').on('input', function() {
+                $('#title-count').text($(this).val().length);
+            });
+
+            $('#Icerik').on('input', function() {
+                $('#content-count').text($(this).val().length);
+            });
+
+            // File input display
+            $('#Resim').change(function() {
+                var fileName = $(this).val().split('\\').pop();
+                if (fileName) {
+                    $('#file-name').text(fileName);
+                } else {
+                    $('#file-name').text('Dosya seçin veya sürükleyip bırakın');
+                }
+            });
+
+            // Form validation
+            $('.needs-validation').on('submit', function(event) {
+                if (this.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                $(this).addClass('was-validated');
+            });
+        });
+    </script>
+</body>
+</html>

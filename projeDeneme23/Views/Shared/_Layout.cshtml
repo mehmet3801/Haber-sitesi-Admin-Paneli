@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
+
+    <style>
+        /* Sidebar başlangıçta dar ve sadece ikonlar görünüyor */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 57px;
+            height: 100vh;
+            background: #a3a3c2;
+            transition: width 0.3s ease-in-out;
+            overflow: hidden;
+        }
+
+            /* Mouse üzerine gelince genişliyor */
+            .sidebar:hover {
+                width: 250px;
+            }
+
+            /* Menü içeriği */
+            .sidebar ul {
+                padding-left: 0;
+                list-style: none;
+                margin: 0;
+            }
+
+                .sidebar ul li {
+                    padding: 15px;
+                    white-space: nowrap;
+                    display: flex;
+                    align-items: center;
+                    transition: background 0.3s ease-in-out;
+                }
+
+                    /* Üzerine gelince hafif arka plan efekti */
+                    .sidebar ul li:hover {
+                        background: rgb(41, 59, 100);
+                    }
+
+                    /* Menü linkleri */
+                    .sidebar ul li a {
+                        color: white;
+                        text-decoration: none;
+                        display: flex;
+                        align-items: center;
+                        gap: 15px;
+                        font-size: 25px; /* Yazı boyutu büyütüldü */
+                        padding: 10px;
+                    }
+
+                        /* Sidebar dar olduğunda metinler gizlenecek */
+                        .sidebar ul li a span {
+                            display: hiden;
+                            opacity: 0;
+                            transition: opacity 0.3s ease-in-out;
+                        }
+
+            /* Mouse üzerine gelince metinler görünecek */
+            .sidebar:hover ul li a span {
+                display: inline;
+                opacity: 1;
+            }
+
+            /* İkonların boyutu */
+            .sidebar ul li i {
+                font-size: 30px; /* İkonlar büyütüldü */
+                width: 70px; /* Daha geniş ikon alanı */
+                text-align: center;
+                color: white;
+            }
+
+        .footer {
+            background-color: #333;
+            color: white;
+        }
+
+        .social-icons a {
+            margin: 0 10px;
+            font-size: 20px;
+            color: white;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+            .social-icons a:hover {
+                color: #4A90E2;
+            }
+
+        textarea {
+            color: red;
+            height: 200px;
+            width: 100%;
+        }
+    </style>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - ASP.NET Uygulamam</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <!-- Sidebar Menü -->
+    <nav class="sidebar">
+        <ul>
+            <li>
+                <i class="ri-home-line"></i>
+                <a href="@Url.Action("Haberler", "Haber")">
+                    <span>Ana Sayfa</span>
+                </a>
+            </li>
+            <li>
+                <i class="ri-news-line"></i>
+                <a href="@Url.Action("Index", "Haber")">
+                    <span>Haberler</span>
+                </a>
+            </li>
+            <li>
+                <i class="ri-sticky-note-add-line"></i>
+                <a href="@Url.Action("Ekle", "Haber")">
+                    <span>Haber Ekle</span>
+                </a>
+            </li>
+            <li>
+                <i class="ri-user-line"></i>
+                <a href="@Url.Action("Giris", "Account")">
+                    <span>Giriş Yap</span>
+                </a>
+            </li>
+
+            <li>
+                <i class="ri-id-card-line"></i>
+                <a href="@Url.Action("AdminListesi", "Admin")">
+                    <span>Admin Listesi</span>
+                </a>
+            </li>
+
+            <li>
+                <i class="ri-timeline-view"></i>
+                <a href="@Url.Action("Index", "KullaniciHaber")">
+                    <span>Görünüm</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        
+
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

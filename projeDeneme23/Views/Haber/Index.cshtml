@@ -1,0 +1,138 @@
+﻿@model IEnumerable<projeDeneme23.Models.Haber>
+@{
+    ViewBag.Title = "Haber Listesi";
+}
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #4A90E2;
+        color: black;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #ddd;
+    }
+
+    .haber-karti {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        background: white;
+        padding: 15px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .haber-karti:hover {
+            transform: scale(1.03);
+        }
+
+        .haber-karti img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .haber-karti h3 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .haber-karti p {
+            font-size: 14px;
+            color: #666;
+        }
+
+    select, input[type="date"] {
+        border-radius: 20px;
+        padding: 5px;
+        margin-right: 10px;
+    }
+</style>
+
+<h2 class="mb-3">Haber Listesi (@Model.Count())</h2>
+
+<!-- Kategori ve Tarih Seçme Alanı -->
+<form method="get" action="@Url.Action("Index", "Haber")" class="mb-3">
+    <label for="kategori">Kategori Seç:</label>
+    <select name="kategori" id="kategori" onchange="this.form.submit()">
+        <option value="">Tüm Kategoriler</option>
+        @foreach (var kategori in ViewBag.Kategoriler)
+        {
+            <option value="@kategori" @(ViewBag.SeciliKategori == kategori ? "selected" : "")>@kategori</option>
+        }
+
+        ViewBag.Kategoriler = db.Kategoriler.Select(k => k.Ad).ToList();
+    </select>
+
+    <!-- Tarih Seçme -->
+    <label for="tarih">Tarih Seç:</label>
+    <input type="date" name="tarih" id="tarih" value="@ViewBag.SeciliTarih?.ToString(" yyyy-MM-dd")" />
+    <button type="submit" class="btn btn-secondary btn-sm">Tarihe Göre Filtrele</button>
+</form>
+
+<a href="@Url.Action("Ekle")" class="btn btn-primary mb-3">Yeni Haber Ekle</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Başlık</th>
+            <th>Kategori</th>
+            <th>Yayın Tarihi</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var haber in Model)
+        {
+            <tr>
+                <td>@haber.Baslik</td>
+                <td>@haber.Kategori</td>
+                <td>@haber.YayınTarihi.ToShortDateString()</td>
+                <td>
+                    <a href="@Url.Action("Duzenle", new { id = haber.Id })" class="btn btn-warning btn-sm">📝 Düzenle</a>
+                    <a href="@Url.Action("Sil", new { id = haber.Id })" class="btn btn-danger btn-sm">🗑 Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h1 class="mt-5">Haber Detayları</h1>
+
+<div class="row">
+    @foreach (var haber in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="haber-karti shadow-sm">
+                @if (!string.IsNullOrEmpty(haber.AnaResimYolu))
+                {
+                    <img src="@haber.AnaResimYolu" alt="Haber Resmi">
+                }
+                <h3>@haber.Baslik</h3>
+                <p>@haber.Kategori | @haber.Yazar | @haber.YayınTarihi.ToShortDateString()</p>
+                <p>@haber.Icerik.Substring(0, Math.Min(haber.Icerik.Length, 100))...</p>
+                <a href="@Url.Action("Detay", "Haber", new { id = haber.Id })" class="btn btn-info btn-sm">Detay</a>
+            </div>
+        </div>
+    }
+</div>
